@@ -1,0 +1,50 @@
+{% extends 'layout.html' %} {% block content %}
+<div id="showcase">
+  {% if session.logged_in == Null %}
+  <span class="small-text">Welcome To Bookshelf</span>
+  <!-- <h2 class="large-text">
+          You can Search in Our database of 5000 books to search for your
+          interest book Also you can leave Reviews and See other Review.
+        </h2> -->
+  <h2 class="large-text">plunge into the wonderful</h2>
+  <h2 class="large-text">world of reading</h2>
+  <div>
+    <a href="/register" class="btn btn-primary btn-lg mr-4">Join US</a>
+    <a href="/login" class="btn btn-success btn-lg">Sign Up</a>
+  </div>
+  {% else %}
+  <h1 class="title">Reading is fascinating, find your favorite book now.</h1>
+  {% endif%}
+</div>
+<div class="container mt-5 text-center" id="features">
+  <h1 class="text-center">Core Features</h1>
+  <p>What's Included</p>
+
+  <div class="row">
+    <div class="col-md-4 feature-box">
+      <i class="fas fa-database"></i>
+      <h2>Access Our Library Now</h2>
+      <p>
+        You’re in the right place. Sign up Today and will be able access our
+        Database of 5000 books. Once you learn to read you will be forever free
+      </p>
+    </div>
+    <div class="col-md-4 feature-box">
+      <i class="fas fa-book"></i>
+      <h2>Today's Research Tomorrow's Innovation</h2>
+      <p>
+        Tell us what ISBN , titles or author you have enjoyed in the past, and
+        we’ll give you surprisingly insightful recommendations.
+      </p>
+    </div>
+    <div class="col-md-4 feature-box">
+      <i class="fas fa-users"></i>
+      <h2>Deciding what to read next?</h2>
+      <p>
+        Chance to see what other people are discussing their favorite (and least
+        favorite) books on Goodreads.
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock content %}

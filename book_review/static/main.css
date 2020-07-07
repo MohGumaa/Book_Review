@@ -45,6 +45,7 @@ h6 {
 
 main {
   min-height: calc(100vh - 60px);
+  margin-top: 5rem;
 }
 
 #showcase {
@@ -80,6 +81,41 @@ main {
   padding: 0 4rem;
   background: #522c1b;
   color: #fff;
+}
+
+/* Feature */
+.feature-box {
+  padding: 3rem;
+}
+#features h2 {
+  font-size: 1.5rem;
+  font-family: "Montserrat-Bold", sans-serif;
+  margin: 0;
+  padding-bottom: 1rem;
+}
+
+#features p {
+  color: #888;
+}
+
+#features .fas {
+  font-size: 60px;
+  color: #522c1b;
+  padding-bottom: 1rem;
+}
+
+/* content */
+.content-section {
+  max-width: 500px;
+  padding: 10px 20px;
+  border: 1px solid #522c1b;
+  border-radius: 3px;
+  margin-bottom: 20px;
+}
+
+.btn:hover {
+  background-color: #522c1b;
+  border-color: #522c1b;
 }
 
 /* Footer Section */
