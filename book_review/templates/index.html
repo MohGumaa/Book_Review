@@ -1,19 +1,16 @@
 {% extends 'layout.html' %} {% block content %}
 <div id="showcase">
-  {% if session.logged_in == Null %}
+  {% if current_user.is_authenticated %}
+  <h2 class="large-text">Reading is fascinating, find your</h2>
+  <h2 class="large-text">favorite book now</h2>
+  {% else %}
   <span class="small-text">Welcome To Bookshelf</span>
-  <!-- <h2 class="large-text">
-          You can Search in Our database of 5000 books to search for your
-          interest book Also you can leave Reviews and See other Review.
-        </h2> -->
   <h2 class="large-text">plunge into the wonderful</h2>
   <h2 class="large-text">world of reading</h2>
   <div>
     <a href="/register" class="btn btn-primary btn-lg mr-4">Join US</a>
     <a href="/login" class="btn btn-success btn-lg">Sign Up</a>
   </div>
-  {% else %}
-  <h1 class="title">Reading is fascinating, find your favorite book now.</h1>
   {% endif%}
 </div>
 <div class="container mt-5 text-center" id="features">
