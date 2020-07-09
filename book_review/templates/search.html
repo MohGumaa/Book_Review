@@ -1,0 +1,37 @@
+{% extends "layout.html" %} {% block content %}
+<section class="container">
+  <form
+    id="searchForm"
+    method="POST"
+    action=""
+    class="border border-dark rounded-top p-3 mb-3"
+  >
+    {{ form.hidden_tag() }}
+    <fieldset class="form-group">
+      <legend class="border-bottom mb-4">
+        <h1 class="display-4 mt-2 text-center">
+          <i class="fas fa-book-open pr-2"></i> Search for a
+          <span>Book</span>
+        </h1>
+      </legend>
+      <div class="form-group">
+        {% if form.searchText.errors %} {{ form.searchText(class="form-control
+        form-control-lg is-invalid") }}
+        <div class="invalid-feedback">
+          {% for error in form.searchText.errors %}
+          <span>{{ error }}</span>
+          {% endfor %}
+        </div>
+        {% else %} {{ form.searchText(id="search",class="form-control
+        form-control-lg", placeholder="Enter ISBN, Title or Author of book",
+        autocomplete="off", autofocus="true") }} {% endif %}
+      </div>
+    </fieldset>
+    <div class="form-group">
+      {{ form.submit(class="btn btn-outline-dark btn-block") }}
+    </div>
+  </form>
+
+  <div id="book-list"></div>
+</section>
+{% endblock content %}

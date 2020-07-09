@@ -62,3 +62,8 @@ class UpdateAccountForm(FlaskForm):
                 raise ValidationError(
                     "That email is taken. Please choose a different one."
                 )
+
+
+class SearchForm(FlaskForm):
+    searchText = StringField(validators=[DataRequired()])
+    submit = SubmitField("Search")

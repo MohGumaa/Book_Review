@@ -3,7 +3,7 @@ import secrets
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request
 from book_review import app, db, bcrypt
-from book_review.forms import RegistrationForm, LoginForm, UpdateAccountForm
+from book_review.forms import RegistrationForm, LoginForm, UpdateAccountForm, SearchForm
 from book_review.models import User, Book, Review
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -79,8 +79,8 @@ def account():
         if form.picture.data:
             picture_file = save_picture(form.picture.data)
             current_user.image_file = picture_file
+            # Add code to remove old img
         current_user.username = form.username.data
-        # Add code to remove old img
         current_user.email = form.email.data
         db.session.commit()
         flash("Your account has been updated!", "success")
@@ -92,3 +92,10 @@ def account():
     return render_template(
         "account.html", title="Account", form=form, image_file=image_file
     )
+
+
+@app.route("/search", methods=["GET", "POST"])
+@login_required
+def search():
+    form = SearchForm()
+    return render_template("search.html", title="Search", form=form)

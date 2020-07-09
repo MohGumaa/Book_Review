@@ -107,15 +107,15 @@ section.container {
   color: #888;
 }
 
-#features .fas {
+.fas {
   font-size: 60px;
   color: #522c1b;
-  padding-bottom: 1rem;
+  /* padding-bottom: 1rem; */
 }
 
 /* content */
 .content-section {
-  max-width: 500px;
+  max-width: 550px;
   padding: 10px 20px;
   border: 1px solid #522c1b;
   border-radius: 3px;
