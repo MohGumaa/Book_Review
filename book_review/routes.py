@@ -1,7 +1,7 @@
 import os
 import secrets
 from PIL import Image
-from flask import render_template, url_for, flash, redirect, request
+from flask import render_template, url_for, flash, redirect, request, jsonify
 from book_review import app, db, bcrypt
 from book_review.forms import RegistrationForm, LoginForm, UpdateAccountForm, SearchForm
 from book_review.models import User, Book, Review
@@ -98,4 +98,13 @@ def account():
 @login_required
 def search():
     form = SearchForm()
-    return render_template("search.html", title="Search", form=form)
+    if form.validate_on_submit():
+        searchText = "%" + form.searchText.data + "%"
+        results = Book.query.filter(
+            (Book.isbn.like(searchText))
+            | (Book.title.like(searchText))
+            | (Book.author.like(searchText))
+        ).all()
+
+        return render_template("search.html", title="Search", form=form, books=results)
+    return render_template("search.html", title="Search", form=form, books=None)

@@ -32,6 +32,36 @@
     </div>
   </form>
 
-  <div id="book-list"></div>
+  <div id="book-list">
+    {% if books%}
+    <h1 class="mt-5">List of books found {{ books|length}}</h1>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Author</th>
+          <th>ISBN</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for book in books %}
+        <tr>
+          <td>{{book.title}}</td>
+          <td>{{book.author}}</td>
+          <td>{{book.isbn}}</td>
+          <td>
+            <a
+              href="/bookpage/${book.isbn}"
+              class="text-primary text-decoration"
+              >Details</a
+            >
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+  </div>
 </section>
 {% endblock content %}
