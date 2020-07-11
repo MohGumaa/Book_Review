@@ -21,6 +21,10 @@ h6 {
   color: #444;
 }
 
+img {
+  width: 100%;
+}
+
 /* Navigation Bar */
 .bg-steel {
   background-color: #522c1b;

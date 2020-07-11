@@ -1,3 +1,4 @@
+const bookList = document.querySelector("#book-list");
 document.addEventListener("DOMContentLoaded", () => {
   // When form is submit create xml requests
   document.querySelector("#searchForm").onsubmit = (e) => {
@@ -7,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Validate if user Enter value then create XML
     if (searchText.value == "") {
-      showMessage("Please fill the field", "danger");
+      showMessage("Please enter title, author or ISBN!", "danger");
     } else {
       find_Books(searchText.value);
     }
@@ -15,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function showMessage(message, className) {
-  document.querySelector("#book-list").innerHTML = "";
+  bookList.innerHTML = "";
   const div = document.createElement("div");
   div.className = `alert alert-${className}`;
   div.appendChild(document.createTextNode(message));
@@ -33,7 +34,28 @@ function find_Books(searchText) {
 
   // When request complete show result
   request.onload = () => {
-    console.log(JSON.parse(request.responseText));
+    const books = JSON.parse(request.responseText);
+    if (books.success) {
+      bookList.innerHTML = `;
+      <h1 class="font-weight-bold my-4">${books.books_list.length} book found</h1>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>ISBN</th>
+            <th>Year</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>`;
+      books.books_list.forEach((book) => displayBook(book));
+    } else {
+      showMessage(books.msg, "danger");
+      console.log(books.msg);
+    }
   };
 
   // Add searchText value to request data
@@ -42,4 +64,20 @@ function find_Books(searchText) {
 
   // Send request
   request.send(data);
+}
+
+function displayBook(book) {
+  const row = document.createElement("tr");
+
+  row.innerHTML = `
+    <td>${book.title}</td>
+    <td>${book.author}</td>
+    <td>${book.isbn}</td>
+    <td>${book.year}</td>
+    <td><a href="/book/${book.id}" class="text-primary text-decoration">Details</a></td>
+    `;
+
+  document.querySelector("tbody").append(row);
+  document.querySelector("#search").value = "";
+  console.log(book);
 }

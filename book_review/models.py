@@ -30,6 +30,15 @@ class Book(db.Model):
     year = db.Column(db.Integer, nullable=False)
     review = db.relationship("Review", backref="book", lazy=True)
 
+    def toJson(self):
+        return {
+            "id": self.id,
+            "isbn": self.isbn,
+            "title": self.title,
+            "author": self.author,
+            "year": self.year,
+        }
+
     def __repr__(self):
         return f"Book ('{self.isbn}', '{self.title}', '{self.author}', '{self.year})"
 

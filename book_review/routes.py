@@ -98,13 +98,27 @@ def account():
 @login_required
 def search():
     form = SearchForm()
-    if form.validate_on_submit():
+    if request.method == "POST":
         searchText = "%" + form.searchText.data + "%"
         results = Book.query.filter(
             (Book.isbn.like(searchText))
             | (Book.title.like(searchText))
             | (Book.author.like(searchText))
         ).all()
+        if len(results) == 0:
+            msg = (
+                "We can't find any match. Please try with other Title, Author or ISBN!"
+            )
+            return jsonify({"success": False, "msg": msg})
 
-        return render_template("search.html", title="Search", form=form, books=results)
-    return render_template("search.html", title="Search", form=form, books=None)
+        books_list = [book.toJson() for book in results]
+        return jsonify({"success": True, "books_list": books_list})
+
+    return render_template("search.html", title="Search", form=form)
+
+
+@app.route("/book/<int:book_id>", methods=["GET", "POST"])
+@login_required
+def book(book_id):
+    book = Book.query.get_or_404(book_id)
+    return render_template("book.html", title="Book Details", book=book)
