@@ -64,11 +64,6 @@ class UpdateAccountForm(FlaskForm):
                 )
 
 
-class SearchForm(FlaskForm):
-    searchText = StringField(validators=[DataRequired()])
-    submit = SubmitField("Search")
-
-
 class RequestResetForm(FlaskForm):
     email = StringField("Email", validators=[DataRequired(), Email()])
     submit = SubmitField("Request Password Reset")
