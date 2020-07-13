@@ -22,12 +22,13 @@ def create_app(config_class=Config):
     login_manager.init_app(app)
     mail.init_app(app)
 
-
     from book_review.users.routes import users
     from book_review.books.routes import books
     from book_review.main.routes import main
+    from book_review.errors.handlers import errors
     app.register_blueprint(users)
     app.register_blueprint(books)
     app.register_blueprint(main)
+    app.register_blueprint(errors)
 
     return app
