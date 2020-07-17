@@ -66,7 +66,7 @@ class Review(db.Model):
     comment = db.Column(db.Text, nullable=False)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-    book_id = db.Column(db.String, db.ForeignKey("books.isbn"), nullable=False)
+    book_id = db.Column(db.String(5), db.ForeignKey("books.isbn"), nullable=False)
 
     def __repr__(self):
         return f"Book ('{self.rating}', '{self.comment}', '{self.date_posted}')"
