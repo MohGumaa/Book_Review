@@ -38,7 +38,7 @@ def register():
 @users.route("/login", methods=["GET", "POSt"])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for("users.home"))
+        return redirect(url_for("main.home"))
 
     form = LoginForm()
     if form.validate_on_submit():
