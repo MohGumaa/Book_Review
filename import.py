@@ -6,6 +6,7 @@ from book_review.models import Book
 app = create_app()
 
 def main():
+    db.drop_all()
     db.create_all()
 
     with open("books.csv") as f:
