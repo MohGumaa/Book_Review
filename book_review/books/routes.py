@@ -14,7 +14,7 @@ def search():
     form = SearchForm()
     if request.method == "POST":
         searchText = "%" + form.searchText.data + "%"
-        results = Book.query.filter(
+        results = Book.query.filter_by(
             (Book.isbn.like(searchText))
             | (Book.title.like(searchText))
             | (Book.author.like(searchText))
