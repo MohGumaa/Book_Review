@@ -81,3 +81,7 @@ function displayBook(book) {
   document.querySelector("#search").value = "";
   console.log(book);
 }
+
+// Set year in footer
+const year = new Date().getFullYear();
+document.querySelector("#year").innerHTML = year;

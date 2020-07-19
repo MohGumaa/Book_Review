@@ -2,6 +2,8 @@
 
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0
 }
 
 body {
@@ -126,7 +128,7 @@ section.container {
   margin-bottom: 20px;
 }
 
-.col-md-8 {
+.col-md-8, .col-md-6 {
   padding: 10px 20px;
   border: 1px solid #522c1b;
   border-radius: 3px;
@@ -161,4 +163,16 @@ footer {
   background: #522c1b;
   color: #fff;
   height: 60px;
+}
+
+@media (max-width: 700px) {
+  #showcase {
+    height: 50vh;
+  }
+
+#showcase .large-text {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  width: 80%
+}
 }
