@@ -70,7 +70,7 @@ function displayBook(book) {
   const row = document.createElement("tr");
 
   row.innerHTML = `
-    <td>${book.title}</td>
+    <td><a href="/book/${book.id}" class="text-primary text-decoration">${book.title}</a></td>
     <td>${book.author}</td>
     <td>${book.isbn}</td>
     <td>${book.year}</td>

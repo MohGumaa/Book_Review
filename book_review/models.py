@@ -50,13 +50,13 @@ class Book(db.Model):
         return {
             "id": self.id,
             "isbn": self.isbn,
-            "title": self.title,
-            "author": self.author,
+            "title": self.title.title(),
+            "author": self.author.title(),
             "year": self.year,
         }
 
     def __repr__(self):
-        return f"Book ('{self.isbn}', '{self.title}', '{self.author}', '{self.year})"
+        return f"Book ({self.title}: {self.author})"
 
 
 class Review(db.Model):

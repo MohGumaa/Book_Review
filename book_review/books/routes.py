@@ -13,7 +13,7 @@ books = Blueprint("books", __name__)
 def search():
     form = SearchForm()
     if request.method == "POST":
-        searchText = "%" + form.searchText.data + "%"
+        searchText = f"%{form.searchText.data}%".lower()
         results = Book.query.filter((Book.isbn.like(searchText)) | (Book.title.like(searchText)) | (Book.author.like(searchText))
         ).all()
         if len(results) == 0:
