@@ -64,7 +64,7 @@
         <hr>
         <ul class="list-group">
           {% for book in current_user.review %}
-          <li class="list-group-item list-group-item-light">{ book }</li>
+          <li class="list-group-item list-group-item-light">{{book.book}}</li>
           {% else %}
           <li class="list-group-item list-group-item-light">You don't start journy yet</li>
           {% endfor %}

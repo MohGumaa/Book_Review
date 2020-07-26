@@ -70,11 +70,11 @@ function displayBook(book) {
   const row = document.createElement("tr");
 
   row.innerHTML = `
-    <td><a href="/book/${book.id}" class="text-primary text-decoration">${book.title}</a></td>
+    <td><a href="/book/${book.isbn}" class="text-primary text-decoration">${book.title}</a></td>
     <td>${book.author}</td>
     <td>${book.isbn}</td>
     <td>${book.year}</td>
-    <td><a href="/book/${book.id}" class="text-primary text-decoration">Details</a></td>
+    <td><a href="/book/${book.isbn}" class="text-primary text-decoration">Details</a></td>
     `;
 
   document.querySelector("tbody").append(row);

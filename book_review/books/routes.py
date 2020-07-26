@@ -1,12 +1,14 @@
+import requests
+import os
 from flask import render_template, url_for, flash, redirect, request, jsonify, Blueprint
 from flask_login import current_user, login_required
 from book_review import db
-from book_review.models import Book
-from book_review.books.forms import SearchForm
-
+from book_review.models import Book, Review
+from book_review.books.forms import SearchForm, ReviewForm
+from dotenv import load_dotenv
+load_dotenv()
 
 books = Blueprint("books", __name__)
-
 
 @books.route("/search", methods=["GET", "POST"])
 @login_required
@@ -28,9 +30,31 @@ def search():
     return render_template("search.html", title="Search", form=form)
 
 
-@books.route("/book/<int:book_id>", methods=["GET", "POST"])
+@books.route("/book/<string:isbn>", methods= ['GET', 'POST'])
 @login_required
-def book(book_id):
-    book = Book.query.get_or_404(book_id)
-    return render_template("book.html", title="Book Details", book=book)
+def book(isbn):
+
+    book = Book.query.filter_by(isbn=isbn).first_or_404()
+    form = ReviewForm()
+    if form.validate_on_submit():
+        review = Review(rating=int(form.rating.data), comment=form.comment.data, user=current_user, book=book)
+        db.session.add(review)
+        db.session.commit()
+        flash(f'Your review has been posted! {int(form.rating.data)}-{form.comment.data  }', 'success')
+        return redirect(url_for("users.account"))
+
+    """GoodReads API to get ratings_count and average_rating value"""
+    res = requests.get("https://www.goodreads.com/book/review_counts.json",
+                       params={"key": os.getenv("API_KEY"), "isbns": isbn}).json()["books"][0]
+    ratings_count = res['work_ratings_count']
+    average_rating = res['average_rating']
+
+    # Here for star of the book from API to fill width in 100%
+    starPercentage = (float(average_rating) / 5) * 100;
+    starPercentageRounded = round(starPercentage / 10) * 10;
+
+    reviews = Review.query.filter_by(book_id=isbn).all()
+
+    return render_template("book.html", title="Book Details", form=form, book=book, ratings_count=ratings_count,
+        average_rating=average_rating, starPercentage=starPercentage, starPercentageRounded=starPercentageRounded, reviews=reviews)
 

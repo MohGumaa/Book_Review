@@ -1,6 +1,6 @@
 {% extends "layout.html" %} {% block content %}
 <section class="container">
-  <div class="row">
+  <div class="row" id="bookShow">
     <div class="col-md-4">
       <img
         src="http://covers.openlibrary.org/b/isbn/{{ book.isbn }}-L.jpg"
@@ -9,84 +9,93 @@
       />
     </div>
     <div class="col-md-8">
-      <h1 class="head-text">{{ book.title }}</h1>
-      <h2 class="author-text">by {{ book.author }}</h2>
-      <!-- <div class="stars-outer">
-        <div class="stars-inner" style="width:{{starPercentageRounded}}%"></div>
-        <span class="number-rating"></span>
-      </div> -->
-      <h1 class="head-text my-5">Book Details:</h1>
-      <ul class="list-group">
-        <li class="list-group-item"><strong>Name: </strong>{{book.title}}</li>
-        <li class="list-group-item">
-          <strong>Writer: </strong>{{book.author}}
-        </li>
-        <li class="list-group-item">
-          <strong>Released: </strong>{{book.year}}
-        </li>
-        <li class="list-group-item"><strong>ISBN: </strong>{{book.isbn}}</li>
-        <li class="list-group-item">
-          <!-- <strong>Average Rating: </strong>{{average_rating}} -->
-        </li>
-        <li class="list-group-item">
-          <!-- <strong>Review: </strong>{{ratings_count}} -->
-        </li>
-      </ul>
-      <hr />
+      <h1 class="head-text">
+        {{ book.title }}
+        <div class="stars-outer">
+          <div class="stars-inner" style="width:{{starPercentageRounded}}%"></div>
+          <span class="number-rating"></span>
+        </div>
+      </h1>
+      <p class="author-text">by {{ book.author }}</p>
+      <h1 class="head-text my-2">Book Details:</h1>
+      <div class="row">
+        <div class="col-md-4 p-2"><strong>Name: </strong>{{book.title}}</div>
+        <div class="col-md-4 p-2"><strong>Writer: </strong>{{book.author}}</div>
+        <div class="col-md-4 p-2"><strong>Released: </strong>{{book.year}}</div>
+        <div class="col-md-4 p-2"><strong>ISBN: </strong>{{book.isbn}}</div>
+        <div class="col-md-4 p-2"><strong>Average Rating: </strong>{{average_rating}}</div>
+        <div class="col-md-4 p-2"><strong>Review: </strong>{{ratings_count}}</div>
+      </div>
+      <hr/>
       <p>
         <button
-          class="btn btn-secondary"
+          class="btn btn-secondary btn-sm"
           type="button"
-          data-toggle="collapse"
-          data-target="#collapseComment"
-          aria-expanded="false"
-          aria-controls="collapseExample"
+          data-toggle="modal"
+          data-target="#reviewModal"
         >
           Add Comment
         </button>
       </p>
-      <div class="collapse" id="collapseComment">
-        <form class="pb-4" action="/bookpage/{{book.isbn}}" method="post">
-          <label class="my-1 mr-2" for="inlineFormCustomSelectPref"
-            >Rating</label
-          >
-          <select
-            class="custom-select my-1 mr-sm-2"
-            id="inlineFormCustomSelectPref"
-            name="rating"
-            required
-          >
-            <option disabled selected value="">Choose Rate 1 - 5</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-          </select>
-          <div class="form-group">
-            <label for="exampleFormControlTextarea1">Review</label>
-            <textarea
-              class="form-control"
-              id="exampleFormControlTextarea1"
-              rows="3"
-              required
-              name="review"
-              required
-            ></textarea>
-          </div>
-          <button class="btn btn-primary" type="submit">Submit</button>
-        </form>
+    </div>
+  </div>
+
+  <div class="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="reviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel">Add Review</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form class="pb-4" action="/book/{{book.isbn}}" method="post">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                  {{ form.rating.label(class="form-control-label") }}
+                  {% if form.rating.errors %}
+                      {{ form.rating(class="form-control form-control-lg is-invalid") }}
+                      <div class="invalid-feedback">
+                          {% for error in form.rating.errors %}
+                              <span>{{ error }}</span>
+                          {% endfor %}
+                      </div>
+                  {% else %}
+                      {{ form.rating(class="form-control form-control-lg") }}
+                  {% endif %}
+              </div>
+              <div class="form-group">
+                  {{ form.comment.label(class="form-control-label") }}
+                  {% if form.comment.errors %}
+                      {{ form.comment(class="form-control form-control-lg is-invalid") }}
+                      <div class="invalid-feedback">
+                          {% for error in form.comment.errors %}
+                              <span>{{ error }}</span>
+                          {% endfor %}
+                      </div>
+                  {% else %}
+                      {{ form.comment(class="form-control form-control-lg") }}
+                  {% endif %}
+              </div>
+             <div class="form-group">
+              {{ form.submit(class="btn btn-outline-dark mt-3") }}
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
+
+  <!-- Review section -->
   <h2 class="mt-5 h2">Reveiws :</h2>
   <div>
-    <ul class="list-group list-group">
+    <ul class="list-group list-group mb-2">
       {% for review in reviews %}
       <li class="list-group-item">
         <div class="card">
           <div class="card-header">
-            <h3>{{review.username}}</h3>
+            <h3>{{review.user.username}}</h3>
             <div class="stars-outer">
               <div
                 class="stars-inner"
@@ -95,11 +104,11 @@
             </div>
           </div>
           <div class="card-body">
-            <p class="card-text">{{review.review}}.</p>
+            <p class="card-text">{{review.comment}}.</p>
           </div>
           <div class="card-footer">
             <small class="text-muted"
-              >Reveiwed on {{review.publish_date}}</small
+              >Reveiwed on {{review.date_posted.strftime('%Y-%m-%d')}}</small
             >
           </div>
         </div>

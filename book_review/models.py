@@ -1,4 +1,3 @@
-
 from datetime import datetime
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask import current_app
@@ -69,5 +68,5 @@ class Review(db.Model):
     book_id = db.Column(db.String, db.ForeignKey("books.isbn"), nullable=False)
 
     def __repr__(self):
-        return f"Book ('{self.rating}', '{self.comment}', '{self.date_posted}')"
+        return f"Book ('{self.rating}', '{self.comment}', '{self.date_posted}', '{self.user_id}', '{self.book_id}')"
 
