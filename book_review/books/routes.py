@@ -33,15 +33,17 @@ def search():
 @books.route("/book/<string:isbn>", methods= ['GET', 'POST'])
 @login_required
 def book(isbn):
-
     book = Book.query.filter_by(isbn=isbn).first_or_404()
+    reviews = Review.query.filter_by(book_id=isbn).all()
+
     form = ReviewForm()
     if form.validate_on_submit():
         review = Review(rating=int(form.rating.data), comment=form.comment.data, user=current_user, book=book)
         db.session.add(review)
         db.session.commit()
-        flash(f'Your review has been posted! {int(form.rating.data)}-{form.comment.data  }', 'success')
-        return redirect(url_for("users.account"))
+        flash('Your review has been posted!', 'success')
+        # Rediect imporve
+        return redirect(url_for("books.book", isbn=isbn))
 
     """GoodReads API to get ratings_count and average_rating value"""
     res = requests.get("https://www.goodreads.com/book/review_counts.json",
@@ -53,8 +55,29 @@ def book(isbn):
     starPercentage = (float(average_rating) / 5) * 100;
     starPercentageRounded = round(starPercentage / 10) * 10;
 
-    reviews = Review.query.filter_by(book_id=isbn).all()
-
     return render_template("book.html", title="Book Details", form=form, book=book, ratings_count=ratings_count,
         average_rating=average_rating, starPercentage=starPercentage, starPercentageRounded=starPercentageRounded, reviews=reviews)
 
+# Api route for get informatioon about any book
+@books.route('/api/<string:isbn>')
+def book_api(isbn):
+
+    # Query DB for any match
+    book = Book.query.filter_by(isbn=isbn).first()
+
+    # Make sure book exists
+    if book is None:
+        return jsonify({"Error": "Invalid book isbn"}), 404
+
+    """GoodReads API"""
+    res = requests.get("https://www.goodreads.com/book/review_counts.json",
+                       params={"key": os.getenv("API_KEY"), "isbns": isbn}).json()["books"][0]
+
+    return jsonify({
+        "title" : book.title,
+        "author" : book.author,
+        "year" : book.year,
+        "isbn" : book.isbn,
+        "review_count" : res['work_reviews_count'],
+        "average_score" : res['average_rating']
+    })
